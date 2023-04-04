@@ -1,8 +1,5 @@
-# Sample workflow for building and deploying a mdBook site to GitHub Pages
-#
-# To get started with mdBook see: https://rust-lang.github.io/mdBook/index.html
-#
-name: Deploy mdBook site to Pages
+# Simple workflow for deploying static content to GitHub Pages
+name: Deploy static content to Pages
 
 on:
   # Runs on pushes targeting the default branch
@@ -24,37 +21,30 @@ concurrency:
   group: 'pages'
   cancel-in-progress: false
 
-jobs:
-  # Build job
-  build:
-    runs-on: ubuntu-latest
-    env:
-      MDBOOK_VERSION: 0.4.21
-    steps:
-      - uses: actions/checkout@v3
-      - name: Install mdBook
-        run: |
-          curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf -y | sh
-          rustup update
-          cargo install --version ${MDBOOK_VERSION} mdbook
-      - name: Setup Pages
-        id: pages
-        uses: actions/configure-pages@v3
-      - name: Build with mdBook
-        run: mdbook build
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
-        with:
-          path: ./book
+env:
+  CARGO_TERM_COLOR: always
 
-  # Deployment job
+jobs:
+  # Single deploy job since we're just deploying
   deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    needs: build
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install mdbook
+        run: cargo install mdbook
+      - name: Generate docs
+        run: mdbook build
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          # Upload entire repository
+          path: './book'
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v2
+        uses: actions/deploy-pages@v1
