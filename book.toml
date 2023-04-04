@@ -1,0 +1,6 @@
+[book]
+authors = ["Trevor Wang"]
+language = "zh"
+multilingual = false
+src = "src"
+title = "chatgpt"
