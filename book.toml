@@ -3,4 +3,4 @@ authors = ["Trevor Wang"]
 language = "zh"
 multilingual = false
 src = "src"
-title = "chatgpt"
+title = "用Flutter从0到1开发ChatGPT客户端"
